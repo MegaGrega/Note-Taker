@@ -13,15 +13,21 @@ var PORT = process.env.PORT || 3000;
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 
+app.listen(PORT, function () {
+    console.log("App listening on PORT " + PORT);
+});
+
 // JSON TEST DATA
 // =============================================================
-var testData = fs.readFile("db.json", function (err, data) {
-    if (err) throw err;
-    // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
-    // an html file.
-    res.writeHead(200, { "Content-Type": "text/html" });
-    res.end(data);
-});
+function testData(req,res){
+    fs.readFile("db.json", function (err, data) {
+        if (err) throw err;
+        // We then respond to the client with the HTML page by specifically telling the browser that we are delivering
+        // an html file.
+        res.writeHead(200, { "Content-Type": "text/html" });
+        res.end(data);
+    });
+}
 
 // Routes
 // =============================================================
@@ -37,9 +43,6 @@ app.get("/notes", function (req, res) {
 
 // Displays all characters
 app.get("/api/notes", function (req, res) {
-    return res.json(testData);
+    return res.json(testData(req,res));
 });
 
-app.listen(PORT, function () {
-    console.log("App listening on PORT " + PORT);
-});
