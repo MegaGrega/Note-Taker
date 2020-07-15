@@ -18,7 +18,7 @@ app.listen(PORT, function () {
     console.log("App listening on PORT " + PORT);
 });
 
-
+var notes = [];
 // Routes
 // =============================================================
 
@@ -31,10 +31,23 @@ app.get("/notes", function (req, res) {
     res.sendFile(path.join(__dirname, "public/notes.html"));
 });
 
-// Displays all characters
-// app.get("/api/notes", function (req, res) {
-//     return 
-// });
-// Making new commit test
+//Displays all notes
+app.get("/api/notes", function (req, res) {    
+    return res.json(notes);
+});
+
+app.post("/api/notes", function (req, res) {
+    var newNote = req.body;
+    fs.readFile('db.json', function (err, data) {
+        var json = JSON.parse(data);
+        json.push(newNote);
+        notes.push(newNote)
+        fs.writeFile("db.json", JSON.stringify(json), function (err) {
+            if (err) throw err;
+            console.log('The "data to append" was appended to file!');
+        });
+    })
+    res.json(newNote);
+});
 
 
